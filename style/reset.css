@@ -1,0 +1,31 @@
+/* Sarah Davis's Custom Reset */
+* {
+margin: 0px;
+padding: 0px;
+
+/* Increase readability especially for dyslexic users */
+line-height: 1.5;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+/* Avoids single-word overflow */
+overflow-wrap: break-word;
+}
+
+/* Toggle off list bulletin points by Andy Bell */
+ol[role="list"], ul[role="list"] {
+list-style: none;
+}
+
+input, button, textarea, select {
+font: inherit;
+}
+
+img, picture, video, canvas, svg {
+/* Avoid extra spacing because default inline */
+display: block;
+/* Responsive image (shrinks to size) */
+max-inline-size: 100%;
+/* Responsive image no overflow? (Not needed because above?)
+max-width: 100%; */
+}

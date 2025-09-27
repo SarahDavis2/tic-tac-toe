@@ -1,27 +1,27 @@
 /* MAIN CODE */
 
-// Gameboard
-    // Create 3x3 array board filled with empty cell objects
-    // showBoard()
-    // availableCells();
+// GameBoard
+function GameBoard() {
 
-// Cell
-    // Initial marker is NULL
-    // addMarker() from either player
-    // getMarker()
+    const board = [];
 
-// Players
-    // Player1
-    // Player2
-    // getActivePlayer()
-    // switchPlayerTurn()
+    const getBoard = () => board;
+    const createBoard = () => {
+        const SIZE = 3;   
+        for (let i = 0; i < SIZE; i++) {
+            board[i] = [];
+            for (let j = 0; j < SIZE; j++) {
+                board[i].push(Cell());
+            }
+        }
+    }
 
-// GameController
-    // Create Gameboard()
-    // getActivePlayer()
-    // showBoard()
-    // addMarker()
-    // Determine Game End/Winner
-    // Render
+    return {
+        getBoard,
+        createBoard,
+    }
+}
+
+
 
 /* DOM - UI */
