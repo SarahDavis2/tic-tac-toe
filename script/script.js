@@ -1,6 +1,5 @@
 /* MAIN CODE */
 
-// GameBoard
 function GameBoard() {
 
     const board = [];
@@ -38,6 +37,49 @@ function Cell() {
     };
 }
 
+function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
 
+    let players = [];
+    const createPlayers = (() => {
+        players.push(
+            {
+                name: playerOneName,
+                val: 1,
+                active: true,
+            },
+            {
+                name: playerTwoName,
+                val: 2,
+                active: false,
+            },
+        );
+    })();
+
+    const swapPlayerTurn = () => {
+        players.forEach(player => {
+            player.active === true ? player.active = false : player.active = true;
+        });
+    }
+    const getPlayer = (num) => players[num];
+    const getActivePlayer = () => {
+        return detActivePlayer = (() => players.find(player => player.active === true))();        
+    }
+
+    return {
+        swapPlayerTurn,
+        getPlayer, 
+        getActivePlayer,
+    }
+
+}
+
+// GameController
+    // Create Gameboard()
+    // getActivePlayer()
+    // showBoard()
+    // addMarker()
+    // Determine Game End
+        // Winner
+    // Render
 
 /* DOM - UI */
