@@ -22,6 +22,22 @@ function GameBoard() {
     }
 }
 
+function Cell() {
+
+    // initial val (an empty cell) is 0
+    let val = 0;
+
+    const getVal = () => val;
+    const addVal = (player) => {
+        val = player.val;
+    }
+
+    return {
+        getVal,
+        addVal, 
+    };
+}
+
 
 
 /* DOM - UI */
