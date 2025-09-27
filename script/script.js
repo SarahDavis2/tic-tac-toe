@@ -1,11 +1,8 @@
 /* MAIN CODE */
-
 function GameBoard() {
 
     const board = [];
-
-    const getBoard = () => board;
-    const createBoard = () => {
+    const createBoard = (() => {
         const SIZE = 3;   
         for (let i = 0; i < SIZE; i++) {
             board[i] = [];
@@ -13,11 +10,12 @@ function GameBoard() {
                 board[i].push(Cell());
             }
         }
-    }
+    })();
+
+    const getBoard = () => board;
 
     return {
         getBoard,
-        createBoard,
     }
 }
 
@@ -70,7 +68,13 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
         getPlayer, 
         getActivePlayer,
     }
+}
 
+function GameController() {
+    gameBoard = GameBoard();
+    players = Players();
+
+    let activePlayer = players.getActivePlayer();
 }
 
 // GameController
