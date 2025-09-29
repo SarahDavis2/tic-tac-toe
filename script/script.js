@@ -12,9 +12,59 @@ function GameBoard() {
             }
         }
     })();
+    const detRowWin = () => {
+        let countFullRow = 0;
+        for (let i = 0; i < SIZE; i++) {
+
+            // reset number to track 3-in-a-row
+            countFullRow = 0;
+            // get the first value to determine if the entire row has the same value
+            const checkVal = board[i][0].getVal();
+        
+            // if first value is 0 then skip row
+            if (checkVal === 0) {
+                continue;
+            }
+            
+            for (let j = 0; j < SIZE; j++) {
+                if (board[i][j].getVal() === checkVal) {
+                    countFullRow++;
+                }
+            }
+            if (countFullRow === 3) {
+                console.log("GAME ENDED FOR ROW");
+            }
+        }
+    }
+    const detColWin = () => {
+        let countFullCol = 0;
+        for (let j = 0; j < SIZE; j++) {
+
+            // reset number to track 3-in-a-row for col
+            countFullCol = 0;
+            // get the first value to determine if the entire col has the same value
+            const checkVal = board[0][j].getVal();
+        
+            // if first value is 0 then skip col
+            if (checkVal === 0) {
+                continue;
+            }
+            
+            for (let i = 0; i < SIZE; i++) {
+                if (board[i][j].getVal() === checkVal) {
+                    countFullCol++;
+                }
+            }
+            if (countFullCol === 3) {
+                console.log("GAME ENDED FOR COL");
+            }
+        }
+    }
 
     // public
-    const isGameEnd = () => {
+    const detGameEnd = () => {
+        detRowWin();
+        detColWin();
 
     }
     const isPlayable = (row, col) => {
@@ -23,8 +73,6 @@ function GameBoard() {
         }
     }
     const placeMarker = (player, row, col) => {
-
-        
         board[row][col].addVal(player);
     }
     const renderBoard = () => {
@@ -40,7 +88,7 @@ function GameBoard() {
     const getBoard = () => board;
 
     return {
-        isGameEnd,
+        detGameEnd,
         isPlayable,
         placeMarker,
         renderBoard,
@@ -118,6 +166,7 @@ function GameController() {
             playTurn(row, col, activePlayer);
             gameBoard.renderBoard();
             players.swapPlayerTurn();
+            gameBoard.detGameEnd();
         }
     }
 
@@ -127,12 +176,19 @@ function GameController() {
 }
 
 game = GameController();
-game.detAction(0, 0);
-game.detAction(0, 0);
+
+// ROW WIN
+// game.detAction(0, 0);
+// game.detAction(1, 0);
+// game.detAction(0, 1);
+// game.detAction(2, 0);
+// game.detAction(0, 2);
+
+// COL WIN
 game.detAction(0, 0);
 game.detAction(0, 1);
+game.detAction(1, 0);
 game.detAction(0, 2);
-
-
+game.detAction(2, 0);
 
 /* DOM - UI */
