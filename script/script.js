@@ -249,11 +249,9 @@ function GameController() {
                 console.log("TIE!");
             } else if (gameEnd !== -1) {
                 players.selectWinner(gameEnd);
+                winner = players.getWinner();
+                console.log(`${players.getName(winner)} Wins!`);
             }
-
-            // DISPLAY WINNER
-            winner = players.getWinner();
-            // getWinner
         }
     }
 
@@ -285,10 +283,23 @@ game = GameController();
 // game.detAction(2, 0);
 // game.detAction(2, 2);
 
-game.detAction(0, 2);
+// game.detAction(0, 2);
+// game.detAction(1, 0);
+// game.detAction(1, 1);
+// game.detAction(2, 2);
+// game.detAction(2, 0);
+
+// TIE
+game.detAction(0, 0);
 game.detAction(1, 0);
+game.detAction(0, 1);
+game.detAction(0, 2);
 game.detAction(1, 1);
 game.detAction(2, 2);
 game.detAction(2, 0);
+game.detAction(2, 1);
+game.detAction(1, 2);
+
+
 
 /* DOM - UI */
