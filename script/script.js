@@ -1,6 +1,7 @@
 /* MAIN CODE */
 function GameBoard() {
 
+    // private
     const SIZE = 3;   
     const board = [];
     const createBoard = (() => {
@@ -11,6 +12,18 @@ function GameBoard() {
             }
         }
     })();
+
+    // public
+    const isPlayable = (row, col) => {
+        if (board[row][col].getVal() === 0) {
+            return true;
+        }
+    }
+    const placeMarker = (player, row, col) => {
+
+        
+        board[row][col].addVal(player);
+    }
     const renderBoard = () => {
         let strNewLine = '';
         for (let i = 0; i < SIZE; i++) {
@@ -21,16 +34,12 @@ function GameBoard() {
             console.log(strNewLine);
         }
     }
-    const placeMarker = (player, row, col) => {
-        board[row][col].addVal(player);
-    }
-
     const getBoard = () => board;
 
     return {
-        renderBoard,
+        isPlayable,
         placeMarker,
-        getBoard,
+        renderBoard,
     }
 }
 
@@ -74,18 +83,17 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
         });
     }
     const getPlayer = (num) => players[num];
+    const getName = (player) => player.name;
     const getActivePlayer = () => {
         return detActivePlayer = (() => players.find(player => player.active === true))();        
     }
 
     return {
         swapPlayerTurn,
-        getPlayer, 
+        getName,
         getActivePlayer,
     }
 }
-
-GameController();
 
 function GameController() {
     gameBoard = GameBoard();
@@ -94,14 +102,24 @@ function GameController() {
     let activePlayer = '';
     const playTurn = (row, col) => {
         activePlayer = players.getActivePlayer();
+        console.log(`${players.getName(activePlayer)}'s Turn`);
+        while (!gameBoard.isPlayable(row, col)) {
+            const changePlay = (() => {
+                console.log("Please enter a playable location");
+                row = parseInt(prompt("Enter i: "));
+                col = parseInt(prompt("Enter j: "));
+            })();
+        }
         gameBoard.placeMarker(activePlayer, row, col);
         gameBoard.renderBoard();
         players.swapPlayerTurn();
     }
 
     playTurn(0, 0);
-    playTurn(0, 1);
+    // playTurn(0, 0);
     playTurn(0, 2);
 }
+
+GameController();
 
 /* DOM - UI */
