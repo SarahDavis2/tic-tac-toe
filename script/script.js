@@ -29,7 +29,7 @@ function GameBoard() {
                 col: board[0][i].getVal(),
             }
 
-            // edge case: if first val is 0 set countLine to not add to 3 (for game win condition)
+            // edge case: val to determine is missing
             if (checkLine.row === 0 || checkLine.col === 0) {
                 isMissing = true;
             }
@@ -49,13 +49,61 @@ function GameBoard() {
             }
         }
     }
+    const detDiagonalWin = () => {
+        let countLine = {
+            left: 0,
+            right: 0,
+        }
+        let isMissing = false;
+
+        // get the middle val of board to determine if the entire line has the same value
+        const checkVal = board[1][1].getVal();
+        // edge case: val to determine is missing
+        if (checkVal === 0) {
+            isMissing = true;
+        }
+
+        const detLeftWin = (() => {
+            for (let i = 0; i < SIZE; i++) {
+                if (board[i][i].getVal() === checkVal) {
+                    countLine.left += 1;
+                }
+            } 
+        })();
+        const detRightWin = (() => {
+            for (let i = 0; i < SIZE; i++) {
+                let j = SIZE - 1 - i;
+                if (board[i][j].getVal() === checkVal) {
+                    countLine.right += 1;
+                }
+            }
+        })();
+
+        if (!isMissing) {
+            if (countLine.left === 3 || countLine.right === 3) {
+                console.log("Diagonal Line Win");
+            }
+        }
+    }
+    const detTie = () => {
+        let isTie = true;
+
+        for (let i = 0; i < SIZE; i++) {
+            for (let j = 0; j < SIZE; j++) {
+                if (board[i][j].getVal() === 0) {
+                    isTie = false;
+                }
+            }
+        }
+        return isTie;
+    }
     
 
     // public
     const detGameEnd = () => {
-        detLineWin();
-        // Add Diagonal Wind
-        // Add Cat Tie
+        // detLineWin();
+        detDiagonalWin();
+        // detTie();
     }
     const isPlayable = (row, col) => {
         if (board[row][col].getVal() === 0) {
@@ -168,11 +216,11 @@ function GameController() {
 game = GameController();
 
 // ROW WIN
-game.detAction(0, 0);
-game.detAction(1, 0);
-game.detAction(0, 1);
-game.detAction(2, 0);
-game.detAction(0, 2);
+// game.detAction(0, 0);
+// game.detAction(1, 0);
+// game.detAction(0, 1);
+// game.detAction(2, 0);
+// game.detAction(0, 2);
 
 // COL WIN
 // game.detAction(0, 0);
@@ -180,5 +228,18 @@ game.detAction(0, 2);
 // game.detAction(1, 0);
 // game.detAction(0, 2);
 // game.detAction(2, 0);
+
+// DIAGONAL WIN
+// game.detAction(0, 0);
+// game.detAction(1, 0);
+// game.detAction(1, 1);
+// game.detAction(2, 0);
+// game.detAction(2, 2);
+
+game.detAction(0, 2);
+game.detAction(1, 0);
+game.detAction(1, 1);
+game.detAction(2, 2);
+game.detAction(2, 0);
 
 /* DOM - UI */
