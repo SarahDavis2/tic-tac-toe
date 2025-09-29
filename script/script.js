@@ -18,6 +18,8 @@ function GameBoard() {
             col: 0,
         };
         let isMissing = false;
+        // default -1 means game has not ended
+        let returnVal = -1;
         for (let i = 0; i < SIZE; i++) {
             // reset number to track 3 consecutive vals
             countLine.row = 0;
@@ -44,10 +46,16 @@ function GameBoard() {
             }
             if (!isMissing) {
                 if (countLine.row === 3 || countLine.col === 3) {
-                    console.log("GAME ENDED");
+                    isEnd = true;
+                    if (countLine.row === 3) {
+                        returnVal = checkLine.row;
+                    } else {
+                        returnVal = checkLine.col;
+                    }
                 }
             }
         }
+        return returnVal;
     }
     const detDiagonalWin = () => {
         let countLine = {
@@ -55,6 +63,8 @@ function GameBoard() {
             right: 0,
         }
         let isMissing = false;
+        // default -1 means game has not ended
+        let returnVal = -1;
 
         // get the middle val of board to determine if the entire line has the same value
         const checkVal = board[1][1].getVal();
@@ -81,9 +91,11 @@ function GameBoard() {
 
         if (!isMissing) {
             if (countLine.left === 3 || countLine.right === 3) {
-                console.log("Diagonal Line Win");
+                isEnd = true;
+                returnVal = checkVal;
             }
         }
+        return returnVal;
     }
     const detTie = () => {
         let isTie = true;
@@ -97,13 +109,23 @@ function GameBoard() {
         }
         return isTie;
     }
-    
 
     // public
     const detGameEnd = () => {
-        // detLineWin();
-        detDiagonalWin();
-        // detTie();
+        let lnWin = detLineWin();
+        let diagWin = detDiagonalWin();
+        // if default -1 then game did not end
+        let returnWinner = -1;
+
+        if (lnWin !== -1) {
+            returnWinner = lnWin;
+        } else if (diagWin !== -1) {
+            returnWinner = diagWin;
+        } else if (detTie()) {
+            // 3 determines game is tie
+            returnWinner = 3;
+        }
+        return returnWinner;
     }
     const isPlayable = (row, col) => {
         if (board[row][col].getVal() === 0) {
@@ -123,7 +145,6 @@ function GameBoard() {
             console.log(strNewLine);
         }
     }
-    const getBoard = () => board;
 
     return {
         detGameEnd,
@@ -158,11 +179,13 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
                 name: playerOneName,
                 val: 1,
                 active: true,
+                winner: false,
             },
             {
                 name: playerTwoName,
                 val: 2,
                 active: false,
+                winner: false,
             },
         );
     })();
@@ -172,7 +195,20 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
             player.active === true ? player.active = false : player.active = true;
         });
     }
-    const getPlayer = (num) => players[num];
+    const selectWinner = (winVal) => {
+        if (players[0].val === winVal) {
+            players[0].winner = true;
+        } else {
+            players[1].winner = true;
+        }
+    }
+    const getWinner = () => {
+            let player = players[0];
+            if (players[1].winner === true) {
+                player = player[1];
+            }
+            return player;
+        }
     const getName = (player) => player.name;
     const getActivePlayer = () => {
         return detActivePlayer = (() => players.find(player => player.active === true))();        
@@ -180,6 +216,8 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
 
     return {
         swapPlayerTurn,
+        selectWinner,
+        getWinner,
         getName,
         getActivePlayer,
     }
@@ -204,7 +242,18 @@ function GameController() {
             playTurn(row, col, activePlayer);
             gameBoard.renderBoard();
             players.swapPlayerTurn();
-            gameBoard.detGameEnd();
+
+            let gameEnd = gameBoard.detGameEnd();
+            // -1 = game not end; 3 = tie
+            if (gameEnd === 3) {
+                console.log("TIE!");
+            } else if (gameEnd !== -1) {
+                players.selectWinner(gameEnd);
+            }
+
+            // DISPLAY WINNER
+            winner = players.getWinner();
+            // getWinner
         }
     }
 
