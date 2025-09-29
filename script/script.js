@@ -1,9 +1,9 @@
 /* MAIN CODE */
 function GameBoard() {
 
+    const SIZE = 3;   
     const board = [];
     const createBoard = (() => {
-        const SIZE = 3;   
         for (let i = 0; i < SIZE; i++) {
             board[i] = [];
             for (let j = 0; j < SIZE; j++) {
@@ -11,10 +11,25 @@ function GameBoard() {
             }
         }
     })();
+    const renderBoard = () => {
+        let strNewLine = '';
+        for (let i = 0; i < SIZE; i++) {
+            strNewLine = '';
+            for (let j = 0; j < SIZE; j++) {
+                strNewLine += `${board[i][j].getVal()}`;
+            }
+            console.log(strNewLine);
+        }
+    }
+    const placeMarker = (player, row, col) => {
+        board[row][col].addVal(player);
+    }
 
     const getBoard = () => board;
 
     return {
+        renderBoard,
+        placeMarker,
         getBoard,
     }
 }
@@ -70,20 +85,23 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
     }
 }
 
+GameController();
+
 function GameController() {
     gameBoard = GameBoard();
     players = Players();
 
-    let activePlayer = players.getActivePlayer();
-}
+    let activePlayer = '';
+    const playTurn = (row, col) => {
+        activePlayer = players.getActivePlayer();
+        gameBoard.placeMarker(activePlayer, row, col);
+        gameBoard.renderBoard();
+        players.swapPlayerTurn();
+    }
 
-// GameController
-    // Create Gameboard()
-    // getActivePlayer()
-    // showBoard()
-    // addMarker()
-    // Determine Game End
-        // Winner
-    // Render
+    playTurn(0, 0);
+    playTurn(0, 1);
+    playTurn(0, 2);
+}
 
 /* DOM - UI */
