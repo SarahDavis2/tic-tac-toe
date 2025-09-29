@@ -14,6 +14,9 @@ function GameBoard() {
     })();
 
     // public
+    const isGameEnd = () => {
+
+    }
     const isPlayable = (row, col) => {
         if (board[row][col].getVal() === 0) {
             return true;
@@ -37,6 +40,7 @@ function GameBoard() {
     const getBoard = () => board;
 
     return {
+        isGameEnd,
         isPlayable,
         placeMarker,
         renderBoard,
@@ -96,30 +100,39 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
 }
 
 function GameController() {
+
+    // private
     gameBoard = GameBoard();
     players = Players();
-
     let activePlayer = '';
-    const playTurn = (row, col) => {
-        activePlayer = players.getActivePlayer();
-        console.log(`${players.getName(activePlayer)}'s Turn`);
-        while (!gameBoard.isPlayable(row, col)) {
-            const changePlay = (() => {
-                console.log("Please enter a playable location");
-                row = parseInt(prompt("Enter i: "));
-                col = parseInt(prompt("Enter j: "));
-            })();
-        }
+    const playTurn = (row, col, player) => {
         gameBoard.placeMarker(activePlayer, row, col);
-        gameBoard.renderBoard();
-        players.swapPlayerTurn();
+        console.log(`${players.getName(activePlayer)} Played.`);
     }
 
-    playTurn(0, 0);
-    // playTurn(0, 0);
-    playTurn(0, 2);
+    // public
+    const detAction = (row, col) => {
+        activePlayer = players.getActivePlayer();
+        console.log(`${players.getName(activePlayer)}'s Turn.`);
+        if (gameBoard.isPlayable(row, col)) {
+            playTurn(row, col, activePlayer);
+            gameBoard.renderBoard();
+            players.swapPlayerTurn();
+        }
+    }
+
+    return {
+        detAction,
+    }
 }
 
-GameController();
+game = GameController();
+game.detAction(0, 0);
+game.detAction(0, 0);
+game.detAction(0, 0);
+game.detAction(0, 1);
+game.detAction(0, 2);
+
+
 
 /* DOM - UI */
