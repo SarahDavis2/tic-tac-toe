@@ -300,6 +300,4 @@ game.detAction(2, 0);
 game.detAction(2, 1);
 game.detAction(1, 2);
 
-
-
 /* DOM - UI */
