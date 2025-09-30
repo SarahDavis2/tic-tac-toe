@@ -177,13 +177,13 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
         players.push(
             {
                 name: playerOneName,
-                val: 1,
+                val: "x",
                 active: true,
                 winner: false,
             },
             {
                 name: playerTwoName,
-                val: 2,
+                val: "o",
                 active: false,
                 winner: false,
             },
