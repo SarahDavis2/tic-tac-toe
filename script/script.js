@@ -145,12 +145,14 @@ function GameBoard() {
             console.log(strNewLine);
         }
     }
+    const getBoard = () => board;
 
     return {
         detGameEnd,
         isPlayable,
         placeMarker,
         renderBoard,
+        getBoard,
     }
 }
 
@@ -254,13 +256,15 @@ function GameController() {
             }
         }
     }
+    const getBoard = () => gameBoard.getBoard();
+    const getActivePlayerName = () => players.getName(activePlayer);
 
     return {
         detAction,
+        getBoard,
+        getActivePlayerName,
     }
 }
-
-game = GameController();
 
 // ROW WIN
 // game.detAction(0, 0);
@@ -290,14 +294,50 @@ game = GameController();
 // game.detAction(2, 0);
 
 // TIE
-game.detAction(0, 0);
-game.detAction(1, 0);
-game.detAction(0, 1);
-game.detAction(0, 2);
-game.detAction(1, 1);
-game.detAction(2, 2);
-game.detAction(2, 0);
-game.detAction(2, 1);
-game.detAction(1, 2);
+// game.detAction(0, 0);
+// game.detAction(1, 0);
+// game.detAction(0, 1);
+// game.detAction(0, 2);
+// game.detAction(1, 1);
+// game.detAction(2, 2);
+// game.detAction(2, 0);
+// game.detAction(2, 1);
+// game.detAction(1, 2);
 
 /* DOM - UI */
+function ScreenController() {
+    // Private
+    const game = GameController();
+
+    const playerTurn = document.querySelector('.player-turn');
+    const displayBoard = document.querySelector('.board');
+
+    const clearBoard = () => {
+        displayBoard.textContent = '';
+    }
+    const renderBoard = () => {
+        clearBoard();
+        showBoard();
+    }
+    const showBoard = () => {
+        const board = game.getBoard();
+
+        board.forEach(row => {
+            row.forEach((cell, index) => {
+                displayBoard.textContent = cell[index];
+            })
+        })
+    }
+
+    const renderScreen = () => {
+        playerTurn.textContent = `${game.getActivePlayerName()}'s Turn.`;
+        renderBoard();
+    }
+
+    game.detAction(0, 0);
+    renderScreen();
+
+
+}
+
+const sus = ScreenController();

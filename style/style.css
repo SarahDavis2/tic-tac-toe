@@ -29,7 +29,7 @@ body {
     background-color: var(--main-clr);
 }
 
-.message {
+.output-msg {
     text-align: center;
 }
 
