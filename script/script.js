@@ -323,8 +323,10 @@ function ScreenController() {
         const board = game.getBoard();
 
         board.forEach(row => {
-            row.forEach((cell, index) => {
-                displayBoard.textContent = cell[index];
+            row.forEach(cell => {
+                const newCell = document.createElement('button');
+                newCell.textContent = `${cell.getVal()}`;
+                displayBoard.appendChild(newCell);
             })
         })
     }
@@ -336,7 +338,12 @@ function ScreenController() {
 
     game.detAction(0, 0);
     renderScreen();
+    game.detAction(1, 0);
+    renderScreen();
 
+    return { 
+        renderScreen,
+    }
 
 }
 

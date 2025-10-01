@@ -27,13 +27,15 @@ body {
     flex: 1;
     padding: 1rem;
     background-color: var(--main-clr);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.output-msg {
-    text-align: center;
-}
-
-.grid {
+.board {
     display: grid;
-    /* ADD MORE */
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    width: 60%;
+    height: 80%;
 }
