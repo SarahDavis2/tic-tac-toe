@@ -339,3 +339,6 @@ function ScreenController() {
 
 const s = ScreenController();
 s.renderScreen();
+
+// Fix needing to use render screen
+// Do #6 for TOP

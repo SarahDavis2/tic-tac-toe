@@ -36,6 +36,11 @@ body {
 .board {
     display: grid;
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-    width: 60%;
+    width: 40%;
     height: 80%;
+    place-content: center;
+}
+
+.board button {
+    font-size: 9rem;
 }
