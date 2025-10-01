@@ -102,7 +102,7 @@ function GameBoard() {
 
         for (let i = 0; i < SIZE; i++) {
             for (let j = 0; j < SIZE; j++) {
-                if (board[i][j].getVal() === 0) {
+                if (board[i][j].getVal() === '') {
                     isTie = false;
                 }
             }
@@ -192,7 +192,7 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
         );
     })();
 
-    const swapPlayerTurn = () => {
+    const swapoutputMsg = () => {
         players.forEach(player => {
             player.active === true ? player.active = false : player.active = true;
         });
@@ -206,8 +206,9 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
     }
     const getWinner = () => {
             let player = players[0];
+
             if (players[1].winner === true) {
-                player = player[1];
+                player = players[1];
             }
             return player;
         }
@@ -217,7 +218,7 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
     }
 
     return {
-        swapPlayerTurn,
+        swapoutputMsg,
         selectWinner,
         getWinner,
         getName,
@@ -230,10 +231,15 @@ function GameController() {
     // private
     gameBoard = GameBoard();
     players = Players();
-    let activePlayer = '';
+    let activePlayer = players.getActivePlayer();
     const playTurn = (row, col, player) => {
         gameBoard.placeMarker(activePlayer, row, col);
         console.log(`${players.getName(activePlayer)} Played.`);
+    }
+    let returnGameEnd = {
+        tie: false,
+        end: false,
+        winner: null,
     }
 
     // public
@@ -243,24 +249,31 @@ function GameController() {
         if (gameBoard.isPlayable(row, col)) {
             playTurn(row, col, activePlayer);
             gameBoard.renderBoard();
-            players.swapPlayerTurn();
+            players.swapoutputMsg();
 
             let gameEnd = gameBoard.detGameEnd();
             // -1 = game not end; 3 = tie
             if (gameEnd === 3) {
                 console.log("TIE!");
+                returnGameEnd.tie = true;
             } else if (gameEnd !== -1) {
                 players.selectWinner(gameEnd);
                 winner = players.getWinner();
                 console.log(`${players.getName(winner)} Wins!`);
+                returnGameEnd.end = true;
+                returnGameEnd.winner = winner;
             }
         }
     }
+    const isTie = () => returnGameEnd.tie;
+    const isWon = () => returnGameEnd.end;
     const getBoard = () => gameBoard.getBoard();
     const getActivePlayerName = () => players.getName(activePlayer);
 
     return {
         detAction,
+        isTie,
+        isWon,
         getBoard,
         getActivePlayerName,
     }
@@ -308,8 +321,10 @@ function GameController() {
 function ScreenController() {
     // Private
     const game = GameController();
+    const board = game.getBoard();
 
-    const playerTurn = document.querySelector('.player-turn');
+
+    const outputMsg = document.querySelector('.out-msg');
     const displayBoard = document.querySelector('.board');
 
     const clearBoard = () => {
@@ -320,8 +335,6 @@ function ScreenController() {
         showBoard();
     }
     const showBoard = () => {
-        const board = game.getBoard();
-
         board.forEach((row, i) => {
             row.forEach((cell, j) => {
                 const newCell = document.createElement('button');
@@ -332,28 +345,40 @@ function ScreenController() {
             })
         })
     }
-
-    // public
     const renderScreen = () => {
-        playerTurn.textContent = `${game.getActivePlayerName()}'s Turn.`;
+        outputMsg.textContent = `${game.getActivePlayerName()}'s Turn.`;
         renderBoard();
+    
+        if (game.isTie()) {
+            outputMsg.textContent = "It's a Tie!";
+            disableBtns();
+        } else if (game.isWon) {
+            outputMsg.textContent = `${game.getActivePlayerName()} Won!`;
+            disableBtns();
+        }
     }
+    const disableBtns = () => {
+        board.forEach((row) => {
+            row.forEach((cell) => {
+                const newCell = document.createElement('button');
+                newCell.textContent = `${cell.getVal()}`;
+                displayBoard.appendChild(newCell);
+            })
+        })
+    }
+    const addClickFtn = (() => {
+        displayBoard.addEventListener("click", (e) => {
+            const rowIndex = e.target.dataset.row;
+            const colIndex = e.target.dataset.col;
+            game.detAction(rowIndex, colIndex);
+            renderScreen();
+        })
+    })();
 
-    displayBoard.addEventListener("click", (e) => {
-        const rowIndex = e.target.dataset.row;
-        const colIndex = e.target.dataset.col;
-        game.detAction(rowIndex, colIndex);
-        renderScreen();
-    })
-    game.detAction(0, 0);
-    renderScreen();
-    // game.detAction(1, 0);
-    // renderScreen();
-
-    return { 
+    return {
         renderScreen,
     }
-
 }
 
-const sus = ScreenController();
+const s = ScreenController();
+s.renderScreen();
