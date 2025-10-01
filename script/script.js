@@ -239,7 +239,6 @@ function GameController() {
     let returnGameEnd = {
         tie: false,
         end: false,
-        winner: null,
     }
 
     // public
@@ -261,7 +260,6 @@ function GameController() {
                 winner = players.getWinner();
                 console.log(`${players.getName(winner)} Wins!`);
                 returnGameEnd.end = true;
-                returnGameEnd.winner = winner;
             }
         }
     }
@@ -278,44 +276,6 @@ function GameController() {
         getActivePlayerName,
     }
 }
-
-// ROW WIN
-// game.detAction(0, 0);
-// game.detAction(1, 0);
-// game.detAction(0, 1);
-// game.detAction(2, 0);
-// game.detAction(0, 2);
-
-// COL WIN
-// game.detAction(0, 0);
-// game.detAction(0, 1);
-// game.detAction(1, 0);
-// game.detAction(0, 2);
-// game.detAction(2, 0);
-
-// DIAGONAL WIN
-// game.detAction(0, 0);
-// game.detAction(1, 0);
-// game.detAction(1, 1);
-// game.detAction(2, 0);
-// game.detAction(2, 2);
-
-// game.detAction(0, 2);
-// game.detAction(1, 0);
-// game.detAction(1, 1);
-// game.detAction(2, 2);
-// game.detAction(2, 0);
-
-// TIE
-// game.detAction(0, 0);
-// game.detAction(1, 0);
-// game.detAction(0, 1);
-// game.detAction(0, 2);
-// game.detAction(1, 1);
-// game.detAction(2, 2);
-// game.detAction(2, 0);
-// game.detAction(2, 1);
-// game.detAction(1, 2);
 
 /* DOM - UI */
 function ScreenController() {
@@ -352,7 +312,7 @@ function ScreenController() {
         if (game.isTie()) {
             outputMsg.textContent = "It's a Tie!";
             disableBtns();
-        } else if (game.isWon) { // FIX ISWON DISPLAYING -- IS PASSING TRUE
+        } else if (game.isWon()) {
             outputMsg.textContent = `${game.getActivePlayerName()} Won!`;
             disableBtns();
         }
