@@ -322,24 +322,31 @@ function ScreenController() {
     const showBoard = () => {
         const board = game.getBoard();
 
-        board.forEach(row => {
-            row.forEach(cell => {
+        board.forEach((row, i) => {
+            row.forEach((cell, j) => {
                 const newCell = document.createElement('button');
                 newCell.textContent = `${cell.getVal()}`;
+                newCell.dataset.column = {i, j};
                 displayBoard.appendChild(newCell);
             })
         })
     }
 
+    // public
     const renderScreen = () => {
         playerTurn.textContent = `${game.getActivePlayerName()}'s Turn.`;
         renderBoard();
     }
 
+    displayBoard.addEventListener("click", (e) => {
+        console.log(e.target.dataset);
+        game.detAction(1, 0);
+        renderScreen();
+    })
     game.detAction(0, 0);
     renderScreen();
-    game.detAction(1, 0);
-    renderScreen();
+    // game.detAction(1, 0);
+    // renderScreen();
 
     return { 
         renderScreen,
