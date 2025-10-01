@@ -32,7 +32,7 @@ function GameBoard() {
             }
 
             // edge case: val to determine is missing
-            if (checkLine.row === 0 || checkLine.col === 0) {
+            if (checkLine.row === '' || checkLine.col === '') {
                 isMissing = true;
             }
             
@@ -69,7 +69,7 @@ function GameBoard() {
         // get the middle val of board to determine if the entire line has the same value
         const checkVal = board[1][1].getVal();
         // edge case: val to determine is missing
-        if (checkVal === 0) {
+        if (checkVal === '') {
             isMissing = true;
         }
 
@@ -128,7 +128,7 @@ function GameBoard() {
         return returnWinner;
     }
     const isPlayable = (row, col) => {
-        if (board[row][col].getVal() === 0) {
+        if (board[row][col].getVal() === '') {
             return true;
         }
     }
@@ -159,7 +159,7 @@ function GameBoard() {
 function Cell() {
 
     // initial val (an empty cell) is 0
-    let val = 0;
+    let val = '';
 
     const getVal = () => val;
     const addVal = (player) => {
