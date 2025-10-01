@@ -192,7 +192,7 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
         );
     })();
 
-    const swapoutputMsg = () => {
+    const swapActivePlayer = () => {
         players.forEach(player => {
             player.active === true ? player.active = false : player.active = true;
         });
@@ -218,7 +218,7 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
     }
 
     return {
-        swapoutputMsg,
+        swapActivePlayer,
         selectWinner,
         getWinner,
         getName,
@@ -249,7 +249,7 @@ function GameController() {
         if (gameBoard.isPlayable(row, col)) {
             playTurn(row, col, activePlayer);
             gameBoard.renderBoard();
-            players.swapoutputMsg();
+            players.swapActivePlayer();
 
             let gameEnd = gameBoard.detGameEnd();
             // -1 = game not end; 3 = tie
@@ -352,19 +352,16 @@ function ScreenController() {
         if (game.isTie()) {
             outputMsg.textContent = "It's a Tie!";
             disableBtns();
-        } else if (game.isWon) {
+        } else if (game.isWon) { // FIX ISWON DISPLAYING -- IS PASSING TRUE
             outputMsg.textContent = `${game.getActivePlayerName()} Won!`;
             disableBtns();
         }
     }
     const disableBtns = () => {
-        board.forEach((row) => {
-            row.forEach((cell) => {
-                const newCell = document.createElement('button');
-                newCell.textContent = `${cell.getVal()}`;
-                displayBoard.appendChild(newCell);
-            })
-        })
+        const cellArr = displayBoard.querySelectorAll('button');
+        cellArr.forEach((btn) => {
+            btn.disabled = true;
+        });
     }
     const addClickFtn = (() => {
         displayBoard.addEventListener("click", (e) => {
