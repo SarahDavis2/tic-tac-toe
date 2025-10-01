@@ -326,7 +326,8 @@ function ScreenController() {
             row.forEach((cell, j) => {
                 const newCell = document.createElement('button');
                 newCell.textContent = `${cell.getVal()}`;
-                newCell.dataset.column = {i, j};
+                newCell.dataset.row = i;
+                newCell.dataset.col = j;
                 displayBoard.appendChild(newCell);
             })
         })
@@ -339,8 +340,9 @@ function ScreenController() {
     }
 
     displayBoard.addEventListener("click", (e) => {
-        console.log(e.target.dataset);
-        game.detAction(1, 0);
+        const rowIndex = e.target.dataset.row;
+        const colIndex = e.target.dataset.col;
+        game.detAction(rowIndex, colIndex);
         renderScreen();
     })
     game.detAction(0, 0);
