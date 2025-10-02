@@ -283,7 +283,6 @@ function ScreenController() {
     const game = GameController();
     const board = game.getBoard();
 
-
     const outputMsg = document.querySelector('.out-msg');
     const displayBoard = document.querySelector('.board');
 
@@ -332,13 +331,11 @@ function ScreenController() {
         })
     })();
 
-    return {
-        renderScreen,
-    }
+    // Initial render
+    renderScreen();
 }
 
-const s = ScreenController();
-s.renderScreen();
+ScreenController();
 
 // Fix needing to use render screen
 // Do #6 for TOP
