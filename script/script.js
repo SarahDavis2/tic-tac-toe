@@ -147,14 +147,9 @@ function GameBoard() {
     }
     const getBoard = () => board;
     const clearBoard = () => {
-        console.log("test");
-
         for (let i = 0; i < SIZE; i++) {
-            board[i] = [];
             for (let j = 0; j < SIZE; j++) {
-                console.log(board[i][j].getVal()); // WHY NO ACCESS??
-
-                // board[i][j].setVal('y');
+                console.log(board[i][j].setVal(''));
             }
         }
     }
@@ -221,6 +216,11 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
             players[1].winner = true;
         }
     }
+    const resetWinner = () => {
+        players.forEach((player) => {
+            player.winner = false;
+        });
+    }
     const setNames = (name1, name2) => {
         players[0].name = name1;
         players[1].name = name2;
@@ -241,6 +241,7 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
     return {
         swapActivePlayer,
         selectWinner,
+        resetWinner,
         setNames,
         getWinner,
         getName,
@@ -288,7 +289,10 @@ function GameController() {
         }
     }
     const restartGame = () => {
-        gameBoard.clearBoard();
+        // gameBoard.clearBoard();
+        // returnGameEnd.tie = false;
+        // returnGameEnd.end = false;
+        // players.resetWinner();
     }
     const isTie = () => returnGameEnd.tie;
     const isWon = () => returnGameEnd.end;
@@ -348,7 +352,12 @@ function ScreenController() {
             btn.disabled = true;
         });
     }
-
+    const enableBtns = () => {
+        const cellArr = displayBoard.querySelectorAll('button');
+        cellArr.forEach((btn) => {
+            btn.disabled = false;
+        });
+    }
     const startBtn = (() => {
         const header = document.querySelector('.header');
         const startBtn = header.querySelector('.start-btn');
@@ -358,6 +367,7 @@ function ScreenController() {
             const name2 = prompt("Please enter player 2's name:");
             game.setNames(name1, name2);
             game.restartGame();
+            enableBtns();
             initializer();
         })
     })();
