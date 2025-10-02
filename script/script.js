@@ -279,31 +279,14 @@ function GameController() {
 
 /* DOM - UI */
 function ScreenController() {
-    // Private
+    // current game
     const game = GameController();
     const board = game.getBoard();
 
+    // dom
     const outputMsg = document.querySelector('.out-msg');
     const displayBoard = document.querySelector('.board');
 
-    const clearBoard = () => {
-        displayBoard.textContent = '';
-    }
-    const renderBoard = () => {
-        clearBoard();
-        showBoard();
-    }
-    const showBoard = () => {
-        board.forEach((row, i) => {
-            row.forEach((cell, j) => {
-                const newCell = document.createElement('button');
-                newCell.textContent = `${cell.getVal()}`;
-                newCell.dataset.row = i;
-                newCell.dataset.col = j;
-                displayBoard.appendChild(newCell);
-            })
-        })
-    }
     const renderScreen = () => {
         outputMsg.textContent = `${game.getActivePlayerName()}'s Turn.`;
         renderBoard();
@@ -316,12 +299,27 @@ function ScreenController() {
             disableBtns();
         }
     }
+    const renderBoard = () => {
+        displayBoard.textContent = '';
+
+        board.forEach((row, i) => {
+            row.forEach((cell, j) => {
+                const newCell = document.createElement('button');
+                newCell.textContent = `${cell.getVal()}`;
+                newCell.dataset.row = i;
+                newCell.dataset.col = j;
+                displayBoard.appendChild(newCell);
+            })
+        })
+    }
     const disableBtns = () => {
         const cellArr = displayBoard.querySelectorAll('button');
         cellArr.forEach((btn) => {
             btn.disabled = true;
         });
     }
+
+    // Initial addEventListenter
     const addClickFtn = (() => {
         displayBoard.addEventListener("click", (e) => {
             const rowIndex = e.target.dataset.row;
@@ -336,6 +334,3 @@ function ScreenController() {
 }
 
 ScreenController();
-
-// Fix needing to use render screen
-// Do #6 for TOP
