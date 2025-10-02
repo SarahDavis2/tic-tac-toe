@@ -149,14 +149,14 @@ function GameBoard() {
     const clearBoard = () => {
         console.log("test");
 
-        for (let i = 0; i < SIZE; i++) {
-            board[i] = [];
-            for (let j = 0; j < SIZE; j++) {
-                console.log(board[i][j].getVal()); // WHY NO ACCESS??
+        // for (let i = 0; i < SIZE; i++) {
+        //     board[i] = [];
+        //     for (let j = 0; j < SIZE; j++) {
+        //         console.log(board[i][j].getVal()); // WHY NO ACCESS??
 
-                // board[i][j].setVal('y');
-            }
-        }
+        //         // board[i][j].setVal('y');
+        //     }
+        // }
     }
 
     return {
@@ -357,7 +357,7 @@ function ScreenController() {
             const name1 = prompt("Please enter player 1's name:");
             const name2 = prompt("Please enter player 2's name:");
             game.setNames(name1, name2);
-            game.restartGame();
+            // game.restartGame();
             initializer();
         })
     })();
