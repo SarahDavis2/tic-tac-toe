@@ -146,6 +146,18 @@ function GameBoard() {
         }
     }
     const getBoard = () => board;
+    const clearBoard = () => {
+        console.log("test");
+
+        for (let i = 0; i < SIZE; i++) {
+            board[i] = [];
+            for (let j = 0; j < SIZE; j++) {
+                console.log(board[i][j].getVal()); // WHY NO ACCESS??
+
+                // board[i][j].setVal('y');
+            }
+        }
+    }
 
     return {
         detGameEnd,
@@ -153,6 +165,7 @@ function GameBoard() {
         placeMarker,
         renderBoard,
         getBoard,
+        clearBoard,
     }
 }
 
@@ -161,12 +174,16 @@ function Cell() {
     // initial val (an empty cell) is 0
     let val = '';
 
+    const setVal = (value) => {
+        val = value;
+    }
     const getVal = () => val;
     const addVal = (player) => {
         val = player.val;
     }
 
     return {
+        setVal,
         getVal,
         addVal, 
     };
@@ -204,6 +221,10 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
             players[1].winner = true;
         }
     }
+    const setNames = (name1, name2) => {
+        players[0].name = name1;
+        players[1].name = name2;
+    }
     const getWinner = () => {
             let player = players[0];
 
@@ -220,6 +241,7 @@ function Players(playerOneName = "Player 1", playerTwoName = "Player 2") {
     return {
         swapActivePlayer,
         selectWinner,
+        setNames,
         getWinner,
         getName,
         getActivePlayer,
@@ -230,6 +252,8 @@ function GameController() {
 
     // private
     gameBoard = GameBoard();
+
+    // initallize plyers
     players = Players();
     let activePlayer = players.getActivePlayer();
     const playTurn = (row, col, player) => {
@@ -247,8 +271,8 @@ function GameController() {
         console.log(`${players.getName(activePlayer)}'s Turn.`);
         if (gameBoard.isPlayable(row, col)) {
             playTurn(row, col, activePlayer);
-            gameBoard.renderBoard();
             players.swapActivePlayer();
+            gameBoard.renderBoard();
 
             let gameEnd = gameBoard.detGameEnd();
             // -1 = game not end; 3 = tie
@@ -263,6 +287,9 @@ function GameController() {
             }
         }
     }
+    const restartGame = () => {
+        gameBoard.clearBoard();
+    }
     const isTie = () => returnGameEnd.tie;
     const isWon = () => returnGameEnd.end;
     const getBoard = () => gameBoard.getBoard();
@@ -270,10 +297,13 @@ function GameController() {
 
     return {
         detAction,
+        restartGame,
         isTie,
         isWon,
         getBoard,
         getActivePlayerName,
+        setNames: players.setNames,
+        swapActivePlayer: players.swapActivePlayer,
     }
 }
 
@@ -319,18 +349,32 @@ function ScreenController() {
         });
     }
 
-    // Initial addEventListenter
-    const addClickFtn = (() => {
-        displayBoard.addEventListener("click", (e) => {
-            const rowIndex = e.target.dataset.row;
-            const colIndex = e.target.dataset.col;
-            game.detAction(rowIndex, colIndex);
-            renderScreen();
+    const startBtn = (() => {
+        const header = document.querySelector('.header');
+        const startBtn = header.querySelector('.start-btn');
+
+        startBtn.addEventListener("click", (e) => {
+            const name1 = prompt("Please enter player 1's name:");
+            const name2 = prompt("Please enter player 2's name:");
+            game.setNames(name1, name2);
+            game.restartGame();
+            initializer();
         })
     })();
+    const initializer = () => {
+        // initial addEventListenter
+        const addClickFtn = (() => {
+            displayBoard.addEventListener("click", (e) => {
+                const rowIndex = e.target.dataset.row;
+                const colIndex = e.target.dataset.col;
+                game.detAction(rowIndex, colIndex);
+                renderScreen();
+            })
+        })();
 
-    // Initial render
-    renderScreen();
+        // initial render
+        renderScreen();
+    }
 }
 
 ScreenController();
